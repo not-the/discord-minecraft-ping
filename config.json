@@ -1,0 +1,7 @@
+{
+  "token": "Discord bot token goes here",
+  "channel_id": "Discord channel ID to post messages in",
+
+  "mc_ip": "Server's IP address",
+  "mc_port": 25565
+}
