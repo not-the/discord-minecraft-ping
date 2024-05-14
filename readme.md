@@ -1,5 +1,10 @@
 # discord-minecraft-ping
 
+Install packages
+```bash
+npm i
+```
+
 Create a config.json:
 ```json
 {
