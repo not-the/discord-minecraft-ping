@@ -16,6 +16,8 @@ let uuids = {}; // Remember UUIDs
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+const intervalSeconds = 180;
+
 // Ready
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
@@ -23,7 +25,7 @@ client.once(Events.ClientReady, readyClient => {
     refresh();
     setInterval(() => {
         refresh();
-    }, 60000);
+    }, intervalSeconds*1000);
 
     /** Ping Minecraft server for up-to-date data */
     function refresh() {
@@ -34,6 +36,8 @@ client.once(Events.ClientReady, readyClient => {
             //     joinLeave('', `Server ${status}`);
             //     postedStatus = status;
             // }
+
+            console.log(mc_res);
 
             if(mc_res?.players?.sample === undefined) return;
 
@@ -65,15 +69,20 @@ client.once(Events.ClientReady, readyClient => {
 
             /** Send join/leave message to Discord */
             function joinLeave(name, message='') {
-                console.log(name+message);
                 let uuid = uuids[name];
                 let iconURL = name === '' ? undefined : `https://mc-heads.net/avatar/${uuid}`;
                 let color = message === ' joined the game' ? 0x0099FF : 0xb92f3b;
                 const embed = new EmbedBuilder()
                     .setColor(color)
-                    .setAuthor({ name:name+message, iconURL:iconURL})
+                    .setAuthor({ name:name+message, iconURL:iconURL});
+
+                // Post to Discord
                 client.channels.cache.get(channel_id).send({ embeds: [embed] });
+
+                // Plaintext message
                 // client.channels.cache.get(channel_id).send(name+message);
+
+                console.log(name+message);
             }
         })
     }
